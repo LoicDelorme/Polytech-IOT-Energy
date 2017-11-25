@@ -77,7 +77,14 @@ public class RaspberryApplication implements Runnable {
 
                 // Send information to server through an MQTT message
                 defautMqttClient.publish(defaultMqttTopic, defaultJsonSerializer.to(energy), defaultMqttQos);
+            } catch (Exception exception) {
+                final Writer writer = new StringWriter();
+                exception.printStackTrace(new PrintWriter(writer));
 
+                logger.severe(writer.toString());
+            }
+
+            try {
                 // Wait a bit
                 Thread.sleep(defaultWebServiceRefreshRateInMs);
             } catch (Exception exception) {
@@ -91,7 +98,7 @@ public class RaspberryApplication implements Runnable {
 
     public static void main(String[] args) throws Exception {
         final Thread applicationThread = new Thread(new RaspberryApplication());
-        applicationThread.setDaemon(true);
+        applicationThread.setDaemon(false);
         applicationThread.start();
     }
 }
