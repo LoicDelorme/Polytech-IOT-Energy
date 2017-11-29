@@ -74,6 +74,7 @@ public class RaspberryApplication implements Runnable {
                 // Get information from web-service
                 final String webServiceResponse = restfulRequester.get(defaultWebServiceResourcePathUrl, String.class);
                 final Energy energy = defaultJsonDeserializer.from(webServiceResponse, Energy.class);
+                energy.setUserId(defaultMqttUuid);
 
                 // Send information to server through an MQTT message
                 defautMqttClient.publish(defaultMqttTopic, defaultJsonSerializer.to(energy), defaultMqttQos);

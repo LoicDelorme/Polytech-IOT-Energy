@@ -4,6 +4,8 @@ import javax.json.bind.annotation.JsonbProperty;
 
 public class Energy {
 
+    private String userId;
+
     private String product;
 
     private String t1Ptec;
@@ -21,6 +23,14 @@ public class Energy {
     private String indexC1;
 
     private String indexC2;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(final String userId) {
+        this.userId = userId;
+    }
 
     public String getProduct() {
         return product;
