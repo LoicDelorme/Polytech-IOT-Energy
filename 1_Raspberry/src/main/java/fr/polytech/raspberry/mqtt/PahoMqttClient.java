@@ -10,14 +10,17 @@ public class PahoMqttClient extends AbstractMqttClient {
 
     private final MqttClient mqttClient;
 
-    private final MqttConnectOptions mqttConnectOptions;
-
     public PahoMqttClient(String clientId, String broker) throws Exception {
         super(clientId, broker);
         this.mqttClient = new MqttClient(broker, clientId, new MemoryPersistence());
+    }
 
-        this.mqttConnectOptions = new MqttConnectOptions();
-        this.mqttConnectOptions.setCleanSession(true);
+    @Override
+    public void connect() throws MqttException {
+        final MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+        mqttConnectOptions.setCleanSession(true);
+
+        this.mqttClient.connect(mqttConnectOptions);
     }
 
     @Override
@@ -25,8 +28,11 @@ public class PahoMqttClient extends AbstractMqttClient {
         final MqttMessage message = new MqttMessage(content.getBytes());
         message.setQos(qos);
 
-        this.mqttClient.connect(this.mqttConnectOptions);
         this.mqttClient.publish(topic, message);
+    }
+
+    @Override
+    public void disconnect() throws MqttException {
         this.mqttClient.disconnect();
     }
 }

@@ -21,5 +21,9 @@ public abstract class AbstractMqttClient {
         return this.broker;
     }
 
+    public abstract void connect() throws MqttException;
+
     public abstract void publish(String topic, String content, int qos) throws MqttException;
+
+    public abstract void disconnect() throws MqttException;
 }

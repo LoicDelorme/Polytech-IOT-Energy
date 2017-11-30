@@ -9,6 +9,7 @@ import fr.polytech.raspberry.restful.RestfulRequester;
 import fr.polytech.raspberry.restful.StringRestfulRequester;
 import fr.polytech.raspberry.serializers.JsonSerializer;
 import fr.polytech.raspberry.serializers.Serializer;
+import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -33,13 +34,13 @@ public class RaspberryApplication implements Runnable {
 
     private static int defaultMqttQos;
 
-    private static AbstractMqttClient defautMqttClient;
+    private static AbstractMqttClient defaultMqttClient;
 
     private static Deserializer<String> defaultJsonDeserializer;
 
     private static Serializer<String> defaultJsonSerializer;
 
-    private static Logger logger;
+    private static final Logger logger = Logger.getLogger(RaspberryApplication.class.getSimpleName());
 
     {
         try (final InputStream inputStream = RaspberryApplication.class.getClassLoader().getResourceAsStream("configuration.properties")) {
@@ -54,12 +55,10 @@ public class RaspberryApplication implements Runnable {
             defaultMqttBroker = properties.getProperty("fr.polytech.raspberry.mqtt.defaultBroker");
             defaultMqttTopic = properties.getProperty("fr.polytech.raspberry.mqtt.defaultTopic");
             defaultMqttQos = Integer.parseInt(properties.getProperty("fr.polytech.raspberry.mqtt.defaultQos"));
+            defaultMqttClient = new PahoMqttClient(defaultMqttUuid, defaultMqttBroker);
 
-            defautMqttClient = new PahoMqttClient(defaultMqttUuid, defaultMqttBroker);
             defaultJsonDeserializer = new JsonDeserializer();
             defaultJsonSerializer = new JsonSerializer();
-
-            logger = Logger.getLogger(RaspberryApplication.class.getSimpleName());
         } catch (Exception e) {
             e.printStackTrace();
             System.exit(1);
@@ -68,6 +67,17 @@ public class RaspberryApplication implements Runnable {
 
     @Override
     public void run() {
+        try {
+            // Attempt a connection to MQTT broker
+            defaultMqttClient.connect();
+        } catch (MqttException exception) {
+            final Writer writer = new StringWriter();
+            exception.printStackTrace(new PrintWriter(writer));
+
+            logger.severe(writer.toString());
+            System.exit(1);
+        }
+
         final RestfulRequester restfulRequester = new StringRestfulRequester(defaultWebServiceBaseUrl);
         while (true) {
             try {
@@ -84,7 +94,7 @@ public class RaspberryApplication implements Runnable {
                 logger.info("mqqtMessageContent: " + mqqtMessageContent);
 
                 // Send MQTT message content to server
-                defautMqttClient.publish(defaultMqttTopic, mqqtMessageContent, defaultMqttQos);
+                defaultMqttClient.publish(defaultMqttTopic, mqqtMessageContent, defaultMqttQos);
             } catch (Exception exception) {
                 final Writer writer = new StringWriter();
                 exception.printStackTrace(new PrintWriter(writer));
