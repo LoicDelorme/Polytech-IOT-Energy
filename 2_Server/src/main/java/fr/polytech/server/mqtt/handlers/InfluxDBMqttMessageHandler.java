@@ -13,10 +13,6 @@ public class InfluxDBMqttMessageHandler implements MqttMessageHandler {
 
     private static final Logger logger = Logger.getLogger(InfluxDBMqttMessageHandler.class.getSimpleName());
 
-    private static final int flushEveryXPoints = 2000;
-
-    private static final int flushEveryXMs = 100;
-
     private final InfluxDB influxDB;
 
     private final Deserializer<String> deserializer;
