@@ -1,5 +1,6 @@
-package fr.polytech.server.mqtt;
+package fr.polytech.server.mqtt.callbacks;
 
+import fr.polytech.server.mqtt.handlers.MqttMessageHandler;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;

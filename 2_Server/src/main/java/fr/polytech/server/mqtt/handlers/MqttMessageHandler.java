@@ -1,4 +1,4 @@
-package fr.polytech.server.mqtt;
+package fr.polytech.server.mqtt.handlers;
 
 public interface MqttMessageHandler {
 

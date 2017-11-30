@@ -1,6 +1,6 @@
 package fr.polytech.server.entities;
 
-public class Energy {
+public class EnergyReport {
 
     private String userId;
 
@@ -8,19 +8,19 @@ public class Energy {
 
     private String t1Ptec;
 
-    private String t1Papp;
+    private int t1Papp;
 
-    private String t1Base;
+    private int t1Base;
 
     private String t2Ptec;
 
-    private String t2Papp;
+    private int t2Papp;
 
-    private String t2Base;
+    private int t2Base;
 
-    private String indexC1;
+    private int indexC1;
 
-    private String indexC2;
+    private int indexC2;
 
     public String getUserId() {
         return userId;
@@ -46,19 +46,19 @@ public class Energy {
         this.t1Ptec = t1Ptec;
     }
 
-    public String getT1Papp() {
+    public int getT1Papp() {
         return t1Papp;
     }
 
-    public void setT1Papp(String t1Papp) {
+    public void setT1Papp(int t1Papp) {
         this.t1Papp = t1Papp;
     }
 
-    public String getT1Base() {
+    public int getT1Base() {
         return t1Base;
     }
 
-    public void setT1Base(String t1Base) {
+    public void setT1Base(int t1Base) {
         this.t1Base = t1Base;
     }
 
@@ -70,35 +70,35 @@ public class Energy {
         this.t2Ptec = t2Ptec;
     }
 
-    public String getT2Papp() {
+    public int getT2Papp() {
         return t2Papp;
     }
 
-    public void setT2Papp(String t2Papp) {
+    public void setT2Papp(int t2Papp) {
         this.t2Papp = t2Papp;
     }
 
-    public String getT2Base() {
+    public int getT2Base() {
         return t2Base;
     }
 
-    public void setT2Base(String t2Base) {
+    public void setT2Base(int t2Base) {
         this.t2Base = t2Base;
     }
 
-    public String getIndexC1() {
+    public int getIndexC1() {
         return indexC1;
     }
 
-    public void setIndexC1(String indexC1) {
+    public void setIndexC1(int indexC1) {
         this.indexC1 = indexC1;
     }
 
-    public String getIndexC2() {
+    public int getIndexC2() {
         return indexC2;
     }
 
-    public void setIndexC2(String indexC2) {
+    public void setIndexC2(int indexC2) {
         this.indexC2 = indexC2;
     }
 }
