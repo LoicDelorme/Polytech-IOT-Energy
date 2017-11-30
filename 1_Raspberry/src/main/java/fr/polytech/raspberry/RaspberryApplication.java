@@ -2,7 +2,7 @@ package fr.polytech.raspberry;
 
 import fr.polytech.raspberry.deserializers.Deserializer;
 import fr.polytech.raspberry.deserializers.JsonDeserializer;
-import fr.polytech.raspberry.entities.Energy;
+import fr.polytech.raspberry.entities.EnergyReport;
 import fr.polytech.raspberry.mqtt.AbstractMqttClient;
 import fr.polytech.raspberry.mqtt.PahoMqttClient;
 import fr.polytech.raspberry.restful.RestfulRequester;
@@ -73,11 +73,18 @@ public class RaspberryApplication implements Runnable {
             try {
                 // Get information from web-service
                 final String webServiceResponse = restfulRequester.get(defaultWebServiceResourcePathUrl, String.class);
-                final Energy energy = defaultJsonDeserializer.from(webServiceResponse, Energy.class);
-                energy.setUserId(defaultMqttUuid);
+                logger.info("webServiceResponse: " + webServiceResponse);
 
-                // Send information to server through an MQTT message
-                defautMqttClient.publish(defaultMqttTopic, defaultJsonSerializer.to(energy), defaultMqttQos);
+                // Parse web-service response
+                final EnergyReport energyReport = defaultJsonDeserializer.from(webServiceResponse, EnergyReport.class);
+                energyReport.setUserId(defaultMqttUuid);
+
+                // Generate MQTT message content
+                final String mqqtMessageContent = defaultJsonSerializer.to(energyReport);
+                logger.info("mqqtMessageContent: " + mqqtMessageContent);
+
+                // Send MQTT message content to server
+                defautMqttClient.publish(defaultMqttTopic, mqqtMessageContent, defaultMqttQos);
             } catch (Exception exception) {
                 final Writer writer = new StringWriter();
                 exception.printStackTrace(new PrintWriter(writer));
